@@ -44,13 +44,20 @@ class App(ctk.CTk):
 
         self.forge_versions = []
         self.forge_version_list = []
-        for version in mll.forge.list_forge_versions():
-            versionid = version.split('-')[0]
-            if versionid not in self.forge_versions:
-                self.forge_versions.append(versionid)
-        for version in mll.utils.get_version_list():
-            if version['id'] in self.forge_versions:
-                self.forge_version_list.append(version['id'])
+        try:
+            for version in mll.forge.list_forge_versions():
+                versionid = version.split('-')[0]
+                if versionid not in self.forge_versions:
+                    self.forge_versions.append(versionid)
+            for version in mll.utils.get_version_list():
+                if version['id'] in self.forge_versions:
+                    self.forge_version_list.append(version['id'])
+        except AttributeError:
+            self.forge_versions = ['AttributeError']
+            self.forge_version_list = ['AttributeError']
+        except Exception:
+            self.forge_versions = ['UnknownError']
+            self.forge_version_list = ['UnknownError']
 
         self.fabric_version_list: list = []
         self.fabric_loader_versions: list = []
@@ -805,18 +812,32 @@ class App(ctk.CTk):
             self.version_install_menu.set(self.vanilla_version_list[0])
         elif self.version_type_choice_segmented_button.get() == 'Forge':
             self.vanilla_version_list = []
-            for version in self.forge_version_list:
-                self.vanilla_version_list.append(version)
+            try:
+                for version in self.forge_version_list:
+                    self.vanilla_version_list.append(version)
+            except AttributeError:
+                self.vanilla_version_list = ['AttributeError']
+                self.vanilla_version_list = ['AttributeError']
+            except Exception:
+                self.vanilla_version_list = ['UnknownError']
+                self.vanilla_version_list = ['UnknownError']
             self.version_install_menu.configure(values=self.vanilla_version_list)
             self.version_install_menu.set(self.vanilla_version_list[0])
 
             loader_versions = []
             chosen_version = self.version_install_menu.get()
-            for version in self.forge_version_list:
-                if version == chosen_version:
-                    for forge_version in mll.forge.list_forge_versions():
-                        if forge_version[:len(chosen_version) + 1] == chosen_version + '-':
-                            loader_versions.append(forge_version)
+            try:
+                for version in self.forge_version_list:
+                    if version == chosen_version:
+                        for forge_version in mll.forge.list_forge_versions():
+                            if forge_version[:len(chosen_version) + 1] == chosen_version + '-':
+                                loader_versions.append(forge_version)
+            except AttributeError:
+                loader_versions = ['AttributeError']
+                loader_versions = ['AttributeError']
+            except Exception:
+                loader_versions = ['UnknownError']
+                loader_versions = ['UnknownError']
             self.loader_versions_menu.configure(values=loader_versions)
             self.loader_versions_menu.set(loader_versions[0])
         elif self.version_type_choice_segmented_button.get() == 'Fabric':
