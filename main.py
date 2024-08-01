@@ -10,7 +10,7 @@ from tkinter import messagebox
 from threading import Thread
 from PIL import Image
 from uuid import uuid1
-from time import sleep
+from time import sleep, time
 import language_loader
 import ram_loader
 
@@ -19,8 +19,8 @@ ctk.set_appearance_mode(language_loader.data['appearance_mode'])
 vanilla_version_list = []
 show_flag = 0
 
-unit = 'GB'
 total_ram = psutil.virtual_memory().total
+unit = 'GB'
 max_ram = ram_loader.convert_bytes(total_ram, unit)
 
 
@@ -513,7 +513,7 @@ class App(ctk.CTk):
         for version in self.installed_versions:
             self.available_versions.append(version['id'])
         self.available_versions = self.available_versions[::-1]
-        if self.available_versions == []:
+        if not self.available_versions:
             self.available_versions.append(f'{language_loader.lang_['no_versions']}')
         self.version_menu.configure(values=self.available_versions)
         self.version_list_menu.configure(values=self.available_versions)
@@ -566,7 +566,7 @@ class App(ctk.CTk):
                                           command=self.change_username)
         self.login_button.grid(row=3, column=0, padx=10, pady=(10, 0), sticky='n')
 
-        if self.username.split() == []:
+        if not self.username.split():
             self.navigation_frame.grid_forget()
             self.home_frame.grid_forget()
             self.login_frame.grid(row=0, column=0, rowspan=2, columnspan=2, padx=320, pady=(150, 180), sticky='nsew')
@@ -767,7 +767,7 @@ class App(ctk.CTk):
             self.available_versions = self.available_versions[::-1]
             self.version_menu.configure(values=self.available_versions)
             self.version_list_menu.configure(values=self.available_versions)
-            if self.available_versions != []:
+            if self.available_versions:
                 self.version_menu.set(self.available_versions[0])
                 self.version_list_menu.set(self.available_versions[0])
             return_configure()
@@ -796,7 +796,6 @@ class App(ctk.CTk):
             self.loader_versions_menu.set(loader_versions[0])
 
     def change_version_list_type(self, value):
-        vanilla_versions = self.vanilla_version_list
         if self.version_type_choice_segmented_button.get() == 'Vanilla':
             self.vanilla_version_list = []
             for version in mll.utils.get_version_list():
@@ -817,9 +816,7 @@ class App(ctk.CTk):
                     self.vanilla_version_list.append(version)
             except AttributeError:
                 self.vanilla_version_list = ['AttributeError']
-                self.vanilla_version_list = ['AttributeError']
             except Exception:
-                self.vanilla_version_list = ['UnknownError']
                 self.vanilla_version_list = ['UnknownError']
             self.version_install_menu.configure(values=self.vanilla_version_list)
             self.version_install_menu.set(self.vanilla_version_list[0])
@@ -834,9 +831,7 @@ class App(ctk.CTk):
                                 loader_versions.append(forge_version)
             except AttributeError:
                 loader_versions = ['AttributeError']
-                loader_versions = ['AttributeError']
             except Exception:
-                loader_versions = ['UnknownError']
                 loader_versions = ['UnknownError']
             self.loader_versions_menu.configure(values=loader_versions)
             self.loader_versions_menu.set(loader_versions[0])
@@ -1059,8 +1054,8 @@ class App(ctk.CTk):
         else:
             self.account_label.configure(text=f'  {self.username}', font=ctk.CTkFont(size=20))
 
-        if self.username.split() != []:
-            if validate_username(self.username) == False:
+        if self.username.split():
+            if not validate_username(self.username):
                 pass
             else:
                 self.login_frame.grid_forget()
@@ -1073,11 +1068,11 @@ class App(ctk.CTk):
 
 
 if __name__ == '__main__':
-    if mll.utils.is_platform_supported() == True:
+    if mll.utils.is_platform_supported():
         try:
             app = App()
             app.mainloop()
         except requests.exceptions.ConnectionError:
             messagebox.showerror('Minecraft Launcher', f'{language_loader.lang_['connection_error']}')
-    elif mll.utils.is_platform_supported() == False:
+    elif not mll.utils.is_platform_supported():
         messagebox.showinfo('Minecraft Launcher', f'{language_loader.lang_['platform_not_supported']}')
