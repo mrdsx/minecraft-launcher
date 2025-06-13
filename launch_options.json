@@ -1,0 +1,15 @@
+{
+    "username": "kingofakneser",
+    "language": "en",
+    "appearance_mode": "system",
+    "include_snapshots": "false",
+    "include_beta": "false",
+    "include_alpha": "false",
+    "enable_custom_resolution": "false",
+    "width": "854",
+    "height": "480",
+    "choose_edit_mode": "simple",
+    "ram_count": 4,
+    "jvm_args": "",
+    "uuid": "33bde034-3a02-11f0-a6fe-c85acf4623bc"
+}
