@@ -1,7 +1,7 @@
 # Minecraft Launcher
 
 This is my custom Minecraft Launcher written on Python using GUI library "customtkinter".
-<br>
+
 ![Minecraft Launcher UI](./assets/minecraft-launcher-ui.png)
 
 ## Features
